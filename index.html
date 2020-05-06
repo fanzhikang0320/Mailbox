@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邮箱注册验证</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <input type="text" placeholder="请输入邮箱" class="input">
+    <button class="sendCode">发送验证码</button>
+    <input type="text" placeholder="邮箱验证码" class="code">
+    <button class="btn">提交</button>
+    <script>
+        var inp = document.getElementsByClassName('input')[0];
+        var code = document.getElementsByClassName('code')[0];
+        var btn = document.getElementsByClassName('btn')[0];
+        var sendCode = document.getElementsByClassName('sendCode')[0];
+        
+        function ajax(url,data,callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET',url,true);
+            
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) {
+                    callback && callback(xhr.responseText)
+                }
+                
+            }
+            xhr.send(inp.value);
+        }
+        
+        sendCode.onclick = function () {
+            console.log('发送验证码');
+            $.ajax({
+                url: 'http://localhost/date',
+                async: false,
+                data: {
+                    mail: inp.value
+                },
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
+
+
+        btn.onclick = function () {
+           $.ajax({
+            url: 'http://localhost/code',
+                async: false,
+                data: {
+                    code: code.value,
+                    time: new Date().getTime()
+                },
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+           })
+        }
+
+    </script>
+</body>
+</html>
